@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="src/Maple.StrongId/Maple.StrongId.csproj" />
+  <Project Path="src/Maple.StrongId.Generators/Maple.StrongId.Generators.csproj" />
+  <Project Path="src/Maple.StrongId.Test/Maple.StrongId.Test.csproj" />
+  <Project Path="src/Maple.StrongId.Generators.Test/Maple.StrongId.Generators.Test.csproj" />
+  <Project Path="src/Maple.StrongId.XyzTest/Maple.StrongId.XyzTest.csproj" />
+  <Project Path="src/Maple.StrongId.Benchmarks/Maple.StrongId.Benchmarks.csproj" />
+  <Project Path="src/Maple.StrongId.ComparisonBenchmarks/Maple.StrongId.ComparisonBenchmarks.csproj" />
+  <Project Path="src/Maple.StrongId.Tester/Maple.StrongId.Tester.csproj" />
+</Solution>

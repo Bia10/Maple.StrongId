@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Maple.StrongId.Generators.Test</RootNamespace>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <IsTrimmable>false</IsTrimmable>
+    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+    <EnableAOTAnalyzer>false</EnableAOTAnalyzer>
+    <EnableConfigurationBindingGenerator>false</EnableConfigurationBindingGenerator>
+    <NoWarn>$(NoWarn);CA2007</NoWarn>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+  </PropertyGroup>
+
+  <!-- Exclude entire test assembly from code coverage metrics -->
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Reference as a regular library so StrongIntIdGenerator can be instantiated in tests.
+         NOT as an Analyzer — that would make the generator run on this project itself. -->
+    <ProjectReference Include="../Maple.StrongId.Generators/Maple.StrongId.Generators.csproj" />
+    <!-- Provides StrongIntIdAttribute for inclusion in test compilations. -->
+    <ProjectReference Include="../Maple.StrongId/Maple.StrongId.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TUnit" />
+    <PackageReference Include="Meziantou.Analyzer">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <!-- Required for CSharpGeneratorDriver, CSharpCompilation, etc. -->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+  </ItemGroup>
+</Project>
