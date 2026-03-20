@@ -77,6 +77,10 @@ public partial class ReadMeTest
 #endif
     public void ReadMeTest_UpdateExampleCodeInMarkdown()
     {
+        if (!File.Exists(s_readmeFilePath))
+        {
+            return;
+        } // CallerFilePath is a deterministic path on CI — skip
         var readmeLines = File.ReadAllLines(s_readmeFilePath);
         var testSourceLines = File.ReadAllLines(s_testSourceFilePath);
 
@@ -170,6 +174,10 @@ public partial class ReadMeTest
 #endif
     public void ReadMeTest_PublicApi()
     {
+        if (!File.Exists(s_readmeFilePath))
+        {
+            return;
+        } // CallerFilePath is a deterministic path on CI — skip
         var publicApi = typeof(ItemTemplateId).Assembly.GeneratePublicApi();
         var readmeLines = File.ReadAllLines(s_readmeFilePath);
         readmeLines = ReplaceReadmeLines(readmeLines, [publicApi], "## Public API Reference", "```csharp", 1, "```", 0);
