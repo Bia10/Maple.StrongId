@@ -24,12 +24,7 @@ jobs:
   build-and-test:
     strategy:
       matrix:
-        os:
-          [
-            ubuntu-latest,
-            windows-latest,
-            macos-latest,
-          ]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         configuration: [Debug, Release]
 
     runs-on: ${{ matrix.os }}
@@ -59,6 +54,34 @@ jobs:
           dotnet run --project src/Maple.StrongId.Test/Maple.StrongId.Test.csproj -c ${{ matrix.configuration }} --no-build
           dotnet run --project src/Maple.StrongId.Generators.Test/Maple.StrongId.Generators.Test.csproj -c ${{ matrix.configuration }} --no-build
           dotnet run --project src/Maple.StrongId.XyzTest/Maple.StrongId.XyzTest.csproj -c ${{ matrix.configuration }} --no-build
+
+  coverage:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v6 # TODO: Pin to full SHA before merging to main
+      - name: Setup .NET (global.json)
+        uses: actions/setup-dotnet@v5 # TODO: Pin to full SHA before merging to main
+        with:
+          global-json-file: global.json
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build -c Release --no-restore
+      - name: Install dotnet-coverage
+        run: dotnet tool install --global dotnet-coverage
+      - name: Collect coverage (Maple.StrongId.Test)
+        run: dotnet-coverage collect --output TestResults/coverage1.xml --output-format cobertura -- dotnet run --project src/Maple.StrongId.Test/Maple.StrongId.Test.csproj -c Release --no-build -- --no-ansi
+      - name: Collect coverage (Maple.StrongId.Generators.Test)
+        run: dotnet-coverage collect --output TestResults/coverage2.xml --output-format cobertura -- dotnet run --project src/Maple.StrongId.Generators.Test/Maple.StrongId.Generators.Test.csproj -c Release --no-build -- --no-ansi
+      - name: Collect coverage (Maple.StrongId.XyzTest)
+        run: dotnet-coverage collect --output TestResults/coverage3.xml --output-format cobertura -- dotnet run --project src/Maple.StrongId.XyzTest/Maple.StrongId.XyzTest.csproj -c Release --no-build -- --no-ansi
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5 # TODO: Pin to full SHA before merging to main
+        with:
+          files: TestResults/coverage1.xml,TestResults/coverage2.xml,TestResults/coverage3.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   format:
     runs-on: ubuntu-latest
@@ -108,7 +131,7 @@ jobs:
           path: ${{ env.NuGetDirectory }}/*nupkg
 
   create-release-push:
-    needs: [build-and-test, format, pack]
+    needs: [build-and-test, coverage, format, pack]
     runs-on: windows-latest
     permissions:
       contents: write
