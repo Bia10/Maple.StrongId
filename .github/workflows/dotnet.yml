@@ -100,7 +100,7 @@ jobs:
           global-json-file: global.json
       - name: Pack NuGet packages
         run: dotnet pack -c Release --output ${{ env.NuGetDirectory }}
-      - uses: actions/upload-artifact@v4 # TODO: Pin to full SHA before merging to main
+      - uses: actions/upload-artifact@v7 # TODO: Pin to full SHA before merging to main
         with:
           name: nuget
           if-no-files-found: error
