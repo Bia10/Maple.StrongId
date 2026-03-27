@@ -78,7 +78,7 @@ jobs:
       - name: Collect coverage (Maple.StrongId.XyzTest)
         run: dotnet-coverage collect --output TestResults/coverage3.xml --output-format cobertura -- dotnet run --project src/Maple.StrongId.XyzTest/Maple.StrongId.XyzTest.csproj -c Release --no-build -- --no-ansi
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5 # TODO: Pin to full SHA before merging to main
+        uses: codecov/codecov-action@v6 # TODO: Pin to full SHA before merging to main
         with:
           files: TestResults/coverage1.xml,TestResults/coverage2.xml,TestResults/coverage3.xml
           token: ${{ secrets.CODECOV_TOKEN }}
